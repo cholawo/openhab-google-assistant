@@ -230,6 +230,28 @@ describe('OpenHAB', () => {
         ]
       });
     });
+
+    test('handleSync omits otherDeviceIds for camera and pin-protected switch', async () => {
+      getItemsMock.mockReturnValue(
+        Promise.resolve([
+          {
+            type: 'String',
+            name: 'CameraItem',
+            label: 'Camera',
+            metadata: { ga: { value: 'Camera' } }
+          },
+          {
+            type: 'Switch',
+            name: 'PinSwitch',
+            label: 'Pin Switch',
+            metadata: { ga: { value: 'Switch', config: { pinNeeded: '1234' } } }
+          }
+        ])
+      );
+      const result = await openHAB.handleSync();
+      expect(result.devices.find((device) => device.id === 'CameraItem').otherDeviceIds).toBeUndefined();
+      expect(result.devices.find((device) => device.id === 'PinSwitch').otherDeviceIds).toBeUndefined();
+    });
   });
 
   describe('onQuery', () => {

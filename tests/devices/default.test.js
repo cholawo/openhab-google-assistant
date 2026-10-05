@@ -64,11 +64,6 @@ describe('Default Device', () => {
         swVersion: packageVersion
       },
       id: 'DefaultDevice',
-      otherDeviceIds: [
-        {
-          deviceId: 'DefaultDevice'
-        }
-      ],
       name: {
         defaultNames: ['Default Device'],
         name: 'Default Device',
@@ -95,6 +90,28 @@ describe('Default Device', () => {
     });
     expect(metadata.customData.ackNeeded).toBe(true);
     expect(metadata.customData.pinNeeded).toBe('1234');
+  });
+
+  test('getMetadata locally controllable includes otherDeviceIds', () => {
+    const Switch = require('../../functions/devices/switch.js');
+    const metadata = Switch.getMetadata({
+      type: 'Switch',
+      name: 'LocalSwitch',
+      label: 'Local Switch',
+      metadata: { ga: { value: 'Switch' } }
+    });
+    expect(metadata.otherDeviceIds).toStrictEqual([{ deviceId: 'LocalSwitch' }]);
+  });
+
+  test('getMetadata camera omits otherDeviceIds', () => {
+    const Camera = require('../../functions/devices/camera.js');
+    const metadata = Camera.getMetadata({
+      type: 'String',
+      name: 'CameraItem',
+      label: 'Camera',
+      metadata: { ga: { value: 'Camera' } }
+    });
+    expect(metadata.otherDeviceIds).toBeUndefined();
   });
 
   test('getMetadata no label fallback', () => {

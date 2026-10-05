@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
 const packageVersion = require('../package.json').version;
+const { supportsLocalFulfillment } = require('../localFulfillment.js');
 
 class DefaultDevice {
   static get type() {
@@ -66,11 +67,6 @@ class DefaultDevice {
       id: item.name,
       type: this.type,
       traits: this.getTraits(item),
-      otherDeviceIds: [
-        {
-          deviceId: item.name
-        }
-      ],
       name: {
         name: deviceName,
         defaultNames: [deviceName],
@@ -118,6 +114,13 @@ class DefaultDevice {
       for (const member in members) {
         metadata.customData.members[member] = members[member].name;
       }
+    }
+    if (supportsLocalFulfillment(item, this)) {
+      metadata.otherDeviceIds = [
+        {
+          deviceId: item.name
+        }
+      ];
     }
     return metadata;
   }
