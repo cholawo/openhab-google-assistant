@@ -67,7 +67,7 @@ describe('OpenHAB', () => {
       getItemsMock.mockResolvedValue([{ name: 'TestItem' }]);
       const result = await openHAB.handleSync();
       expect(getItemsMock).toHaveBeenCalledTimes(1);
-      expect(result).toStrictEqual({ devices: [] });
+      expect(result).toStrictEqual({ agentUserId: 'openhab-home', devices: [] });
     });
 
     test('handleSync single switch', async () => {
@@ -84,6 +84,7 @@ describe('OpenHAB', () => {
       const result = await openHAB.handleSync();
       expect(getItemsMock).toHaveBeenCalledTimes(1);
       expect(result).toStrictEqual({
+        agentUserId: 'openhab-home',
         devices: [
           {
             attributes: {
@@ -100,6 +101,11 @@ describe('OpenHAB', () => {
               swVersion: packageVersion
             },
             id: 'SwitchItem',
+            otherDeviceIds: [
+              {
+                deviceId: 'SwitchItem'
+              }
+            ],
             name: {
               defaultNames: ['Switch Item'],
               name: 'Switch Item',
@@ -149,6 +155,7 @@ describe('OpenHAB', () => {
       const result = await openHAB.handleSync();
       expect(getItemsMock).toHaveBeenCalledTimes(1);
       expect(result).toStrictEqual({
+        agentUserId: 'openhab-home',
         devices: [
           {
             attributes: {
@@ -165,6 +172,11 @@ describe('OpenHAB', () => {
               swVersion: packageVersion
             },
             id: 'SwitchItem',
+            otherDeviceIds: [
+              {
+                deviceId: 'SwitchItem'
+              }
+            ],
             name: {
               defaultNames: ['Switch Item'],
               name: 'Switch Item',
@@ -195,6 +207,11 @@ describe('OpenHAB', () => {
               swVersion: packageVersion
             },
             id: 'LightItem',
+            otherDeviceIds: [
+              {
+                deviceId: 'LightItem'
+              }
+            ],
             name: {
               defaultNames: ['Light Item'],
               name: 'Light Item',

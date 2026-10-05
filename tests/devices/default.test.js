@@ -64,6 +64,11 @@ describe('Default Device', () => {
         swVersion: packageVersion
       },
       id: 'DefaultDevice',
+      otherDeviceIds: [
+        {
+          deviceId: 'DefaultDevice'
+        }
+      ],
       name: {
         defaultNames: ['Default Device'],
         name: 'Default Device',

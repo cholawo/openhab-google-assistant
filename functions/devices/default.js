@@ -66,6 +66,11 @@ class DefaultDevice {
       id: item.name,
       type: this.type,
       traits: this.getTraits(item),
+      otherDeviceIds: [
+        {
+          deviceId: item.name
+        }
+      ],
       name: {
         name: deviceName,
         defaultNames: [deviceName],

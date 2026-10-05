@@ -120,10 +120,12 @@ class OpenHAB {
             `openhabGoogleAssistant - handleSync - SYNC is adding: ${item.type}:${item.name}` +
               ` with type: ${DeviceType.type}`
           );
-          discoveredDevicesList.push(DeviceType.getMetadata(item));
+          const metadata = DeviceType.getMetadata(item);
+          console.log(`openhabGoogleAssistant - handleSync - metadata: ${JSON.stringify(metadata)}`);
+          discoveredDevicesList.push(metadata);
         }
       });
-      return { devices: discoveredDevicesList };
+      return { agentUserId: 'openhab-home', devices: discoveredDevicesList };
     });
   }
 
