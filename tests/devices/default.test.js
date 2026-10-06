@@ -1,4 +1,5 @@
 const Device = require('../../functions/devices/default.js');
+const config = require('../../functions/config.js');
 const packageVersion = require('../../functions/package.json').version;
 
 describe('Default Device', () => {
@@ -101,6 +102,23 @@ describe('Default Device', () => {
       metadata: { ga: { value: 'Switch' } }
     });
     expect(metadata.otherDeviceIds).toStrictEqual([{ deviceId: 'LocalSwitch' }]);
+  });
+
+  test('getMetadata switch omits otherDeviceIds when local fulfillment is off', () => {
+    const Switch = require('../../functions/devices/switch.js');
+    const original = config.localFulfillment;
+    config.localFulfillment = false;
+    try {
+      const metadata = Switch.getMetadata({
+        type: 'Switch',
+        name: 'CloudSwitch',
+        label: 'Cloud Switch',
+        metadata: { ga: { value: 'Switch' } }
+      });
+      expect(metadata.otherDeviceIds).toBeUndefined();
+    } finally {
+      config.localFulfillment = original;
+    }
   });
 
   test('getMetadata camera omits otherDeviceIds', () => {

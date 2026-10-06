@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
 const packageVersion = require('../package.json').version;
+const appConfig = require('../config.js');
 const { supportsLocalFulfillment } = require('../localFulfillment.js');
 
 class DefaultDevice {
@@ -115,7 +116,7 @@ class DefaultDevice {
         metadata.customData.members[member] = members[member].name;
       }
     }
-    if (supportsLocalFulfillment(item, this)) {
+    if (appConfig.localFulfillment && supportsLocalFulfillment(item, this)) {
       metadata.otherDeviceIds = [
         {
           deviceId: item.name

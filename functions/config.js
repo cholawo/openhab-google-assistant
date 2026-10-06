@@ -31,10 +31,14 @@
  * path
  *    Base URL path for openHAB items
  *
+ * localFulfillment
+ *    When true, SYNC adds otherDeviceIds so Google can use local fulfillment
+ *
  * */
 module.exports = {
   // userpass: process.env.OH_USERPASS || 'user@foo.com:Password1',
   host: process.env.OH_HOST || '<YOUR-CLOUD-HOST>',
   port: parseInt(process.env.OH_PORT) || 443,
-  path: process.env.OH_PATH || '/YOUR/REST/ENDPOINT'
+  path: process.env.OH_PATH || '/YOUR/REST/ENDPOINT',
+  localFulfillment: process.env.OH_LOCAL_FULFILLMENT === 'true'
 };

@@ -4,7 +4,7 @@ import prettierPlugin from 'eslint-plugin-prettier';
 
 export default [
   {
-    ignores: ['node_modules/', 'coverage/', '.eslintcache']
+    ignores: ['node_modules/', 'coverage/', '.eslintcache', 'dist/', 'scripts/**/*.mjs']
   },
   js.configs.recommended,
   prettier,
@@ -32,7 +32,8 @@ export default [
         setImmediate: 'readonly',
         clearImmediate: 'readonly',
         fetch: 'readonly',
-        AbortSignal: 'readonly'
+        AbortSignal: 'readonly',
+        URL: 'readonly'
       }
     },
     plugins: {

@@ -184,6 +184,60 @@ To fix:
 
 Return back to the Google Home app and try to add the OpenHAB service again. You should now be able to see `[test] open hab` and add it successfully.
 
+## Local fulfillment
+
+The repository can run two independent servers. Enable either or both.
+
+* **Assistant server** (`npm start`) — cloud fulfillment for SYNC, QUERY, and EXECUTE. Listens on `OH_SERVER_PORT` (default 3000). This is the existing Cloud Function entry point when deployed from `functions/`.
+* **Local server** (`npm run start:local`) — LAN HTTP plus mDNS for Google Local Home. Listens on `LOCAL_PORT` (default 3002) and talks to openHAB at `LOCAL_OPENHAB_URL` (default `http://127.0.0.1:8080`).
+* **`OH_LOCAL_FULFILLMENT`** — only affects cloud SYNC. Set it to `true` on the assistant server so SYNC adds `otherDeviceIds` for locally eligible devices. Default is `false`.
+
+These switches are independent. A typical split-host setup:
+
+* Cloud host: assistant server on, `OH_LOCAL_FULFILLMENT=true`, local server off. Google learns which devices can be controlled locally.
+* Home machine: local server on, assistant server off. The Local Home app on Google Home talks to this LAN process.
+
+The same machine can also run both. Cameras, locks, security systems, doors, garages, gates, and PIN/ack-protected items never get `otherDeviceIds`.
+
+### Run the local server
+
+Requires Node.js 22+ and Avahi (`avahi-publish-address`, `avahi-publish-service`).
+
+```shell
+npm install
+npm run start:local
+```
+
+| Variable | Default | Purpose |
+| --- | --- | --- |
+| `LOCAL_PORT` | `3002` | HTTP listen port advertised over mDNS |
+| `LOCAL_OPENHAB_URL` | `http://127.0.0.1:8080` | openHAB REST base URL |
+| `LOCAL_OPENHAB_USERPASS` | unset | Optional `username:password` for openHAB Basic auth |
+| `LOCAL_MDNS_NAME` | `openhab-google` | Display name advertised as `_openhab-google._tcp` |
+
+Copy `.env.example` to `.env` to override defaults. Changing `LOCAL_PORT` requires rebuilding the Local Home bundles.
+
+### Local Home app
+
+`local-app/` is the Google-hosted Local Home SDK app. It does not run on the home machine. Build the bundles, then upload them in the Google Home Developer Console. Set the scan type to `_openhab-google._tcp`.
+
+```shell
+npm run build:local
+```
+
+That writes `dist/local/web/bundle.js`, `dist/local/web/index.html`, and `dist/local/node/bundle.js`. Typecheck with `npm run typecheck:local`.
+
+### Request Sync
+
+After changing `OH_LOCAL_FULFILLMENT` or item metadata, ask HomeGraph to send SYNC:
+
+```shell
+GOOGLE_APPLICATION_CREDENTIALS=/path/to/service-account.json \
+npm run request-sync -- <agentUserId>
+```
+
+`<agentUserId>` must match the third-party user id already sent in the cloud SYNC response (`openhab-home` by default).
+
 ## Item Configuration, Example Voice Commands & Service Linkage
 
 For details on how to configure your items and which voice commands you can use, please see the [USAGE documentation](docs/USAGE.md).

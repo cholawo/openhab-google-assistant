@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const express = require('express');
 
 const app = express();
@@ -31,6 +33,10 @@ app.use('/', (req, res) => {
 });
 
 const port = process.env.OH_SERVER_PORT || 3000;
-app.listen(port, () => {
+app.listen(port, (error) => {
+  if (error) {
+    console.error('Failed to listen on port %s: %s', port, error.message);
+    process.exit(1);
+  }
   console.log('Server is listening on port %s', port);
 });

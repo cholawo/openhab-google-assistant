@@ -6,3 +6,5 @@
 /gactions/
 /node_modules/
 /functions/node_modules/
+/dist/
+.env
