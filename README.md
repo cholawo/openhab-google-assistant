@@ -186,18 +186,20 @@ Return back to the Google Home app and try to add the OpenHAB service again. You
 
 ## Local fulfillment
 
-The repository can run two independent servers. Enable either or both.
+The repository can run three independent processes. Enable any combination.
 
 * **Assistant server** (`npm start`) — cloud fulfillment for SYNC, QUERY, and EXECUTE. Listens on `OH_SERVER_PORT` (default 3000). This is the existing Cloud Function entry point when deployed from `functions/`.
 * **Local server** (`npm run start:local`) — LAN HTTP plus mDNS for Google Local Home. Listens on `LOCAL_PORT` (default 3002) and talks to openHAB at `LOCAL_OPENHAB_URL` (default `http://127.0.0.1:8080`).
+* **State reporter** (`npm run start:report-state`) — no HTTP server. Subscribes to openHAB `ItemStateChangedEvent`s and POSTs the same `DeviceType.getState` payload QUERY returns to Home Graph `reportStateAndNotification`.
 * **`OH_LOCAL_FULFILLMENT`** — only affects cloud SYNC. Set it to `true` on the assistant server so SYNC adds `otherDeviceIds` for locally eligible devices. Default is `false`.
+* **`OH_REPORT_STATE`** — only affects cloud SYNC. Set it to `true` on the assistant server so SYNC sets `willReportState: true`. Default is `false`. Turn this on only after the state reporter is running; otherwise Google stops querying and Home Graph state goes stale.
 
 These switches are independent. A typical split-host setup:
 
-* Cloud host: assistant server on, `OH_LOCAL_FULFILLMENT=true`, local server off. Google learns which devices can be controlled locally.
-* Home machine: local server on, assistant server off. The Local Home app on Google Home talks to this LAN process.
+* Cloud host: assistant server on, `OH_LOCAL_FULFILLMENT=true`, local server off. Google learns which devices can be controlled locally. Leave `OH_REPORT_STATE` unset on the public action.
+* Home machine: local server on, state reporter on, assistant server off or on for a private action. The Local Home app on Google Home talks to the LAN process. The reporter uses Application Default Credentials (`GOOGLE_APPLICATION_CREDENTIALS`) and `AGENT_USER_ID` (default `openhab-home`).
 
-The same machine can also run both. Cameras, locks, security systems, doors, garages, gates, and PIN/ack-protected items never get `otherDeviceIds`.
+The same machine can also run all three. Cameras, locks, security systems, doors, garages, gates, and PIN/ack-protected items never get `otherDeviceIds`.
 
 ### Run the local server
 
@@ -217,6 +219,17 @@ npm run start:local
 
 Copy `.env.example` to `.env` to override defaults. Changing `LOCAL_PORT` requires rebuilding the Local Home bundles.
 
+### Report State
+
+```shell
+GOOGLE_APPLICATION_CREDENTIALS=/path/to/service-account.json \
+npm run start:report-state
+```
+
+The reporter reuses `LOCAL_OPENHAB_URL` and optional `LOCAL_OPENHAB_USERPASS`. It reports a snapshot of every matched device on startup, then debounces item changes by about one second. Scene items and other devices whose `getState` is empty are skipped. `NULL`/`UNDEF` items are reported as `{ online: false }`. Do not commit a service-account file.
+
+Turn on `OH_REPORT_STATE=true` on the private fulfillment process only after this reporter is running. Then restart fulfillment and run `npm run request-sync`.
+
 ### Local Home app
 
 `local-app/` is the Google-hosted Local Home SDK app. It does not run on the home machine. Build the bundles, then upload them in the Google Home Developer Console. Set the scan type to `_openhab-google._tcp`.
@@ -229,7 +242,7 @@ That writes `dist/local/web/bundle.js`, `dist/local/web/index.html`, and `dist/l
 
 ### Request Sync
 
-After changing `OH_LOCAL_FULFILLMENT` or item metadata, ask HomeGraph to send SYNC:
+After changing `OH_LOCAL_FULFILLMENT`, `OH_REPORT_STATE`, or item metadata, ask HomeGraph to send SYNC:
 
 ```shell
 GOOGLE_APPLICATION_CREDENTIALS=/path/to/service-account.json \
@@ -256,7 +269,7 @@ gcloud beta functions logs read openhabGoogleAssistant
 
 * Sometimes the Account Linkage needs to be done twice and repeated
 * Google Assistant does not respond to querying the current brightness of an item
-* Report State (`reportStateAndNotification`) is not implemented yet; devices currently advertise `willReportState: false`
+* Report State is off by default (`willReportState: false`). Set `OH_REPORT_STATE=true` on fulfillment and run `npm run start:report-state` to push the same trait state QUERY returns into Home Graph.
 
 ## References
 

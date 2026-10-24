@@ -132,6 +132,18 @@ describe('Default Device', () => {
     expect(metadata.otherDeviceIds).toBeUndefined();
   });
 
+  test('getMetadata willReportState is true only when reportState is on', () => {
+    const original = config.reportState;
+    try {
+      config.reportState = false;
+      expect(Device.getMetadata(item).willReportState).toBe(false);
+      config.reportState = true;
+      expect(Device.getMetadata(item).willReportState).toBe(true);
+    } finally {
+      config.reportState = original;
+    }
+  });
+
   test('getMetadata no label fallback', () => {
     const metadata = Device.getMetadata({
       type: 'Number',

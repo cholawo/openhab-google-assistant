@@ -76,7 +76,7 @@ class DefaultDevice {
           ...(item.metadata?.synonyms ? item.metadata.synonyms.value.split(',').map((s) => s.trim()) : [])
         ]
       },
-      willReportState: false,
+      willReportState: !!appConfig.reportState,
       roomHint: config.roomHint,
       structureHint: config.structureHint,
       deviceInfo: {

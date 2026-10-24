@@ -33,6 +33,9 @@ export default [
         clearImmediate: 'readonly',
         fetch: 'readonly',
         AbortSignal: 'readonly',
+        AbortController: 'readonly',
+        TextEncoder: 'readonly',
+        ReadableStream: 'readonly',
         URL: 'readonly'
       }
     },

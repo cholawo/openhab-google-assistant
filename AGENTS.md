@@ -54,6 +54,8 @@ This repository implements a Google Assistant Smart Home Action for OpenHAB, ena
    # Assistant server listens on port 3000 (configurable via OH_SERVER_PORT)
    npm run start:local
    # Local fulfillment server listens on port 3002 (configurable via LOCAL_PORT)
+   npm run start:report-state
+   # Home Graph Report State process; no HTTP server
    ```
 
 ### Build Validation
@@ -71,10 +73,13 @@ The application requires these environment variables:
 - `OH_PORT`: Port (default: 443, test: 1234)
 - `OH_PATH`: REST API path (default: /rest/items/)
 - `OH_LOCAL_FULFILLMENT`: When `true`, cloud SYNC adds `otherDeviceIds` (default: false; tests set `true`)
+- `OH_REPORT_STATE`: When `true`, cloud SYNC sets `willReportState: true` (default: false; leave unset in tests)
 - `LOCAL_PORT`: Local fulfillment HTTP port (default: 3002)
 - `LOCAL_OPENHAB_URL`: Local openHAB REST base URL (default: http://127.0.0.1:8080)
 - `LOCAL_OPENHAB_USERPASS`: Optional `username:password` for local openHAB Basic auth
 - `LOCAL_MDNS_NAME`: mDNS display name (default: openhab-google)
+- `AGENT_USER_ID`: Home Graph third-party user id for Report State (default: openhab-home)
+- `GOOGLE_APPLICATION_CREDENTIALS`: Service-account JSON path for Report State and request-sync
 
 ## Project Structure & Key Files
 
@@ -106,6 +111,7 @@ The application requires these environment variables:
   utilities.js        # Shared utility functions
   package.json        # Cloud Function dependencies
 /local-server/        # LAN HTTP + mDNS process for Local Home
+/state-reporter/      # Home Graph Report State process (npm run start:report-state)
 /local-app/           # Google-hosted Local Home SDK app (build with npm run build:local)
 /tests/               # Comprehensive test suite
   /commands/          # Command handler tests

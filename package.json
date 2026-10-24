@@ -15,6 +15,7 @@
   "scripts": {
     "start": "node testServer.js",
     "start:local": "node local-server/index.js",
+    "start:report-state": "node state-reporter/index.js",
     "build:local": "node scripts/build-local.mjs",
     "typecheck:local": "tsc --noEmit -p local-app",
     "request-sync": "tsx scripts/request-sync.ts",

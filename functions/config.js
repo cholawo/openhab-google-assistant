@@ -34,11 +34,15 @@
  * localFulfillment
  *    When true, SYNC adds otherDeviceIds so Google can use local fulfillment
  *
+ * reportState
+ *    When true, SYNC sets willReportState so Google expects Report State
+ *
  * */
 module.exports = {
   // userpass: process.env.OH_USERPASS || 'user@foo.com:Password1',
   host: process.env.OH_HOST || '<YOUR-CLOUD-HOST>',
   port: parseInt(process.env.OH_PORT) || 443,
   path: process.env.OH_PATH || '/YOUR/REST/ENDPOINT',
-  localFulfillment: process.env.OH_LOCAL_FULFILLMENT === 'true'
+  localFulfillment: process.env.OH_LOCAL_FULFILLMENT === 'true',
+  reportState: process.env.OH_REPORT_STATE === 'true'
 };

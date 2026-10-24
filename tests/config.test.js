@@ -2,7 +2,7 @@ const Config = require('../functions/config.js');
 
 describe('Config', () => {
   test('All properties available', () => {
-    expect(Object.keys(Config)).toStrictEqual(['host', 'port', 'path', 'localFulfillment']);
+    expect(Object.keys(Config)).toStrictEqual(['host', 'port', 'path', 'localFulfillment', 'reportState']);
   });
 
   test('Properties used from ENV', () => {
@@ -10,5 +10,6 @@ describe('Config', () => {
     expect(Config.port).toBe(1234);
     expect(Config.path).toBe('/test/items');
     expect(Config.localFulfillment).toBe(true);
+    expect(Config.reportState).toBe(false);
   });
 });
