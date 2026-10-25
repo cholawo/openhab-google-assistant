@@ -60,6 +60,19 @@ describe('OnOff Command', () => {
       expect(Command.getItemName(device)).toBe('PowerItem');
     });
 
+    test('getItemName AudioVideoReceiver', () => {
+      const device = {
+        id: 'Item',
+        customData: {
+          deviceType: 'AudioVideoReceiver',
+          members: {
+            tvPower: 'PowerItem'
+          }
+        }
+      };
+      expect(Command.getItemName(device)).toBe('PowerItem');
+    });
+
     test('getItemName Fan', () => {
       expect(() => {
         Command.getItemName({ name: 'Item', customData: { deviceType: 'Fan', itemType: 'Group' } });

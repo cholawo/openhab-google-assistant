@@ -1,4 +1,5 @@
 const DefaultCommand = require('./default.js');
+const TV = require('../devices/tv.js');
 const { ERROR_CODES, GoogleAssistantError } = require('../googleErrorCodes.js');
 
 class OnOff extends DefaultCommand {
@@ -25,11 +26,11 @@ class OnOff extends DefaultCommand {
       }
       throw new GoogleAssistantError(ERROR_CODES.NOT_SUPPORTED, 'SpecialColorLight has no power or brightness member');
     }
-    if (deviceType === 'TV') {
+    if (TV.isMediaGroupDevice(deviceType)) {
       if ('tvPower' in members) {
         return members.tvPower;
       }
-      throw new GoogleAssistantError(ERROR_CODES.NOT_SUPPORTED, 'TV has no power member configured');
+      throw new GoogleAssistantError(ERROR_CODES.NOT_SUPPORTED, 'Device has no power member configured');
     }
     if (['AirPurifier', 'Fan', 'Hood', 'ACUnit'].includes(deviceType) && this.getItemType(device) === 'Group') {
       if ('fanPower' in members) {

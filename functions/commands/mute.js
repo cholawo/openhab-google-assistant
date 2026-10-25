@@ -1,4 +1,5 @@
 const DefaultCommand = require('./default.js');
+const TV = require('../devices/tv.js');
 const { ERROR_CODES, GoogleAssistantError } = require('../googleErrorCodes.js');
 
 class Mute extends DefaultCommand {
@@ -11,7 +12,7 @@ class Mute extends DefaultCommand {
   }
 
   static getItemName(device) {
-    if (this.getDeviceType(device) === 'TV') {
+    if (TV.isMediaGroupDevice(this.getDeviceType(device))) {
       const members = this.getMembers(device);
       if ('tvMute' in members) {
         return members.tvMute;
@@ -19,14 +20,14 @@ class Mute extends DefaultCommand {
       if ('tvVolume' in members) {
         return members.tvVolume;
       }
-      throw new GoogleAssistantError(ERROR_CODES.NOT_SUPPORTED, 'TV has no tvMute or tvVolume member configured');
+      throw new GoogleAssistantError(ERROR_CODES.NOT_SUPPORTED, 'Device has no tvMute or tvVolume member configured');
     }
     return device.id;
   }
 
   static convertParamsToValue(params, item, device) {
     let itemType = this.getItemType(device);
-    if (this.getDeviceType(device) === 'TV') {
+    if (TV.isMediaGroupDevice(this.getDeviceType(device))) {
       const members = this.getMembers(device);
       if ('tvMute' in members) {
         itemType = 'Switch';

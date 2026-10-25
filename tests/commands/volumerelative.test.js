@@ -32,6 +32,18 @@ describe('volumeRelative Command', () => {
       };
       expect(Command.getItemName(device)).toBe('VolumeItem');
     });
+
+    test('getItemName AudioVideoReceiver', () => {
+      const device = {
+        customData: {
+          deviceType: 'AudioVideoReceiver',
+          members: {
+            tvVolume: 'VolumeItem'
+          }
+        }
+      };
+      expect(Command.getItemName(device)).toBe('VolumeItem');
+    });
   });
 
   describe('convertParamsToValue', () => {
@@ -59,6 +71,25 @@ describe('volumeRelative Command', () => {
       expect(() => {
         Command.convertParamsToValue(params, {}, { customData: { deviceType: 'TV' } });
       }).toThrow();
+    });
+
+    test('convertParamsToValue AudioVideoReceiver', () => {
+      const item = {
+        members: [
+          {
+            state: '20',
+            type: 'Number',
+            metadata: {
+              ga: {
+                value: 'tvVolume'
+              }
+            }
+          }
+        ]
+      };
+      expect(Command.convertParamsToValue(params, item, { customData: { deviceType: 'AudioVideoReceiver' } })).toBe(
+        '30'
+      );
     });
   });
 

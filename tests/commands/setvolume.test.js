@@ -28,6 +28,18 @@ describe('setVolume Command', () => {
       };
       expect(Command.getItemName(device)).toBe('VolumeItem');
     });
+
+    test('getItemName AudioVideoReceiver', () => {
+      const device = {
+        customData: {
+          deviceType: 'AudioVideoReceiver',
+          members: {
+            tvVolume: 'VolumeItem'
+          }
+        }
+      };
+      expect(Command.getItemName(device)).toBe('VolumeItem');
+    });
   });
 
   test('convertParamsToValue', () => {

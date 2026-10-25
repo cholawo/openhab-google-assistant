@@ -16,24 +16,24 @@ class VolumeRelative extends DefaultCommand {
   }
 
   static getItemName(device) {
-    if (this.getDeviceType(device) === 'TV') {
+    if (TV.isMediaGroupDevice(this.getDeviceType(device))) {
       const members = this.getMembers(device);
       if ('tvVolume' in members) {
         return members.tvVolume;
       }
-      throw new GoogleAssistantError(ERROR_CODES.NOT_SUPPORTED, 'TV has no tvVolume member configured');
+      throw new GoogleAssistantError(ERROR_CODES.NOT_SUPPORTED, 'Device has no tvVolume member configured');
     }
     return device.id;
   }
 
   static convertParamsToValue(params, item, device) {
     let state = item.state;
-    if (this.getDeviceType(device) === 'TV') {
+    if (TV.isMediaGroupDevice(this.getDeviceType(device))) {
       const members = TV.getMembers(item);
       if ('tvVolume' in members) {
         state = members.tvVolume.state;
       } else {
-        throw new GoogleAssistantError(ERROR_CODES.NOT_SUPPORTED, 'TV has no tvVolume member configured');
+        throw new GoogleAssistantError(ERROR_CODES.NOT_SUPPORTED, 'Device has no tvVolume member configured');
       }
     }
     const level = parseInt(state) + params.relativeSteps;

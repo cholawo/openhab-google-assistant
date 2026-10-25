@@ -49,6 +49,7 @@ const SpecialColorLight = require('./devices/specialcolorlight.js');
 const TemperatureSensor = require('./devices/temperaturesensor.js');
 const Thermostat = require('./devices/thermostat.js');
 const TV = require('./devices/tv.js');
+const AudioVideoReceiver = require('./devices/audiovideoreceiver.js');
 const Vacuum = require('./devices/vacuum.js');
 const Washer = require('./devices/washer.js');
 const Valve = require('./devices/valve.js');
@@ -112,6 +113,7 @@ const DEVICE_REGISTRY = [
   TemperatureSensor,
   Thermostat,
   TV,
+  AudioVideoReceiver,
   Vacuum,
   Washer,
   Valve,

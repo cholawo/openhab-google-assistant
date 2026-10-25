@@ -489,6 +489,25 @@ String applicationItem (tvGroup) { ga="tvApplication" }
 Player transportItem   (tvGroup) { ga="tvTransport" }
 ```
 
+### Audio video receiver
+
+| | |
+|---|---|
+| **Device Type** | [Audio video receiver](https://developers.home.google.com/cloud-to-cloud/guides/audiovideoreceiver) |
+| **Supported Traits** | [OnOff](https://developers.home.google.com/cloud-to-cloud/traits/onoff), [Volume](https://developers.home.google.com/cloud-to-cloud/traits/volume), [TransportControl](https://developers.home.google.com/cloud-to-cloud/traits/transportcontrol), [InputSelector](https://developers.home.google.com/cloud-to-cloud/traits/inputselector), [AppSelector](https://developers.home.google.com/cloud-to-cloud/traits/appselector), [MediaState](https://developers.home.google.com/cloud-to-cloud/traits/mediastate) |
+| **Supported Items** | Group as `AUDIO_VIDEO_RECEIVER` with the same optional members as [TV](#tv): `tvPower`, `tvMute`, `tvVolume`, `tvInput`, `tvApplication`, `tvTransport` (Channel is not exposed for this device type) |
+| **Configuration** | Same as [TV](#tv) |
+
+```shell
+Group  avrGroup { ga="AUDIO_VIDEO_RECEIVER" [ volumeDefaultPercentage="20", levelStepSize="10", volumeMaxLevel="100", transportControlSupportedCommands="NEXT,PREVIOUS,PAUSE,RESUME", availableInputs="hdmi1=xbox:gaming,hdmi2=settopbox", availableApplications="spotify=Spotify:Music" ] }
+Switch powerItem       (avrGroup) { ga="tvPower" }
+Switch muteItem        (avrGroup) { ga="tvMute" }
+Dimmer volumeItem      (avrGroup) { ga="tvVolume" }
+String inputItem       (avrGroup) { ga="tvInput" }
+String applicationItem (avrGroup) { ga="tvApplication" }
+Player transportItem   (avrGroup) { ga="tvTransport" }
+```
+
 ### Fan, Hood, AirPurifier (only on/off or fan speed control)
 
 | | |

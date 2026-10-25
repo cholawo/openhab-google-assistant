@@ -5,6 +5,10 @@ class TV extends DefaultDevice {
     return 'action.devices.types.TV';
   }
 
+  static isMediaGroupDevice(deviceType) {
+    return deviceType === 'TV' || deviceType === 'AudioVideoReceiver';
+  }
+
   static getTraits(item) {
     const traits = [
       'action.devices.traits.AppSelector',

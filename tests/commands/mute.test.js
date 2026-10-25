@@ -43,6 +43,19 @@ describe('Mute Command', () => {
       };
       expect(Command.getItemName(device)).toBe('VolumeItem');
     });
+
+    test('getItemName AudioVideoReceiver mute', () => {
+      const device = {
+        id: 'Item',
+        customData: {
+          deviceType: 'AudioVideoReceiver',
+          members: {
+            tvMute: 'MuteItem'
+          }
+        }
+      };
+      expect(Command.getItemName(device)).toBe('MuteItem');
+    });
   });
 
   describe('convertParamsToValue', () => {
